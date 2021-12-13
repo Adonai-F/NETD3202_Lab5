@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 // New imported models
 using Lab5.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 // Install Microsoft.EntityFrameworkCore.Tools on nuget
+using Lab5.Data;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace Lab5
 {
@@ -35,15 +39,18 @@ namespace Lab5
             // Disable endpoint routing
             services.AddMvc(options => options.EnableEndpointRouting = false);
 
-            // Adding a connection
-            string connection = @"Server=(localdb)\mssqllocaldb;Database=Lab5;Trusted_Connection=True;ConnectRetryCount=0";
-            services.AddDbContext<InventoryContex>(options => options.UseSqlServer(connection));
+            // Adding a connection. Importing from appsetting.json
+            services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             /*To create database: Tools - NuGet Package Manager- PAckage Manager Console. 
              * Type in console: Add-Migration InitialCreate. 
              * Creates Migration folder. Go back to console
              * Run Update-Database
              * View - Sql Server Object Explorer
              */
+
+            // Add Identity
+            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +72,10 @@ namespace Lab5
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // Add these two after model and dbcontext are created
+            app.UseMvcWithDefaultRoute();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
