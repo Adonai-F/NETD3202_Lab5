@@ -26,6 +26,7 @@ namespace Lab5.Models
         // Foreign Key
         public Purchased purchased { get; set; }
 
+        /*
         // Default Constructor
         Inventory() { }
 
@@ -39,5 +40,6 @@ namespace Lab5.Models
             this.quantity = quantity;
             this.price = price;
         }
+        */
     }
 }

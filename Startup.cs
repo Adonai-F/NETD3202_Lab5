@@ -41,7 +41,10 @@ namespace Lab5
 
             // Adding a connection. Importing from appsetting.json
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(Configuration.GetConnectionString("MyDbConnection")));
+            // Adding a connection. Importing from appsetting.json
+            services.AddDbContext<InventoryContex>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("MyDbConnection")));
             /*To create database: Tools - NuGet Package Manager- PAckage Manager Console. 
              * Type in console: Add-Migration InitialCreate. 
              * Creates Migration folder. Go back to console
